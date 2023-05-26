@@ -5,23 +5,21 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import utils.DataGenerator;
 import utils.RepeatedActions;
-
 import java.time.Duration;
-import java.util.UUID;
 
 public class OrangeHrmAutomatedTest { //klasa
 
     private WebDriver driver; //zmienna
 
     @BeforeMethod //adnotacja
-
     public void beforeMethod() { //metoda (ktora nic nie zwraca [void])
-
         System.setProperty("webdriver.chrome.driver", "drivers/chromedriver");
+
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
 
@@ -29,12 +27,10 @@ public class OrangeHrmAutomatedTest { //klasa
         driver.manage().window().maximize();
         driver.navigate().to("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-
     }
 
     @Test
     public void asAdminAddNewAdministratorAccountTest() throws InterruptedException {
-
         WebElement usernameLabel = driver.findElement(By.name("username")); // zmienna typu webelement
         usernameLabel.sendKeys("Admin");
 
@@ -63,7 +59,7 @@ public class OrangeHrmAutomatedTest { //klasa
         selectEnabledDropdown.click();
 
         WebElement randomUserPassword = driver.findElement(By.xpath("(//input[@class='oxd-input oxd-input--active'])[3]"));
-        String generatedPassword = DataGenerator.generatePassword();
+        String generatedPassword = DataGenerator.generatePassword(10);
         randomUserPassword.sendKeys(generatedPassword);
         System.out.println(randomUserPassword);
 
@@ -97,18 +93,14 @@ public class OrangeHrmAutomatedTest { //klasa
 
         WebElement positiveAlert = driver.findElement(By.cssSelector("div[class='oxd-toast-icon-container']"));
         Assert.assertTrue(positiveAlert.isDisplayed());
-
-
-
     }
 
-   // @AfterMethod
-    //public void afterMethod() {
-      //  driver.close();
-        //driver.quit();
+    @AfterMethod
+    public void afterMethod() {
+        driver.close();
+        driver.quit();
     }
-
-//}
+}
 
 
 
